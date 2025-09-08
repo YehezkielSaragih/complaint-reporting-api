@@ -22,4 +22,11 @@ public class ComplaintService {
                 .build();
         return ResponseEntity.ok(complaintRepo.save(tempComplaint));
     }
+
+    public ResponseEntity<ComplaintEntity> getComplaintDetail(Long id){
+        ComplaintEntity tempComplaint = complaintRepo.findById(id).orElse(null);
+        if (tempComplaint == null) return ResponseEntity.notFound().build();
+
+        return ResponseEntity.ok(tempComplaint);
+    }
 }
