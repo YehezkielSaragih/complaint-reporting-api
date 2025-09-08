@@ -8,6 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.Optional;
+
 @Service
 public class ComplaintService {
 
@@ -21,5 +24,17 @@ public class ComplaintService {
                 .userId(req.getUserId())
                 .build();
         return ResponseEntity.ok(complaintRepo.save(tempComplaint));
+    }
+
+    public ResponseEntity<ComplaintEntity> updateStatus(Long id, Status status) {
+        Optional<ComplaintEntity> complaintOpt = complaintRepo.findById(id);
+        if (complaintOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        ComplaintEntity tempComplaint = complaintOpt.get();
+        tempComplaint.setStatus(status);
+        tempComplaint.setUpdatedAt(LocalDateTime.now());
+        complaintRepo.save(tempComplaint);
+        return ResponseEntity.ok(tempComplaint);
     }
 }
