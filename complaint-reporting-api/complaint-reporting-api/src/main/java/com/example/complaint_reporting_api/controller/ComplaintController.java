@@ -9,12 +9,19 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/complaints")
 public class ComplaintController {
 
     @Autowired
     ComplaintService complaintService;
+
+    @GetMapping
+    public ResponseEntity<List<ComplaintEntity>> getAllComplaint(@RequestParam(required = false) String status){
+        return complaintService.getAllComplaint(status);
+    }
 
     // create complaint
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
