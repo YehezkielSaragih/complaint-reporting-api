@@ -2,6 +2,7 @@ package com.example.complaint_reporting_api.controller;
 
 import com.example.complaint_reporting_api.dto.complaint.ChangeComplainStatusRequest;
 import com.example.complaint_reporting_api.dto.complaint.CreateComplainRequest;
+import com.example.complaint_reporting_api.dto.complaint.StatisticComplainRequest;
 import com.example.complaint_reporting_api.entity.ComplaintEntity;
 import com.example.complaint_reporting_api.service.ComplaintService;
 
@@ -49,5 +50,11 @@ public class ComplaintController {
     @DeleteMapping("/{id}")
     public ResponseEntity<ComplaintEntity> deleteComplaint(@PathVariable Long id) {
         return complaintService.deleteComplaint(id);
+    }
+
+    // statistic
+    @GetMapping("/statistics")
+    public ResponseEntity<List<StatisticComplainRequest>> getStatistics() {
+        return complaintService.getStatistics();
     }
 }
