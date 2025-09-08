@@ -18,5 +18,5 @@ public class CreateComplainRequest {
     @Size(min = 20, message = "Deskripsi minimal 20 karakter")
     private String description;
 
-    private Status status;
+    private String status;
 }
