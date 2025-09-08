@@ -2,7 +2,6 @@ package com.example.complaint_reporting_api.entity;
 
 import lombok.*;
 import jakarta.validation.constraints.*;
-import java.util.List;
 import java.time.LocalDateTime;
 
 @Setter

@@ -1,7 +1,6 @@
 package com.example.complaint_reporting_api.repository;
 
 import com.example.complaint_reporting_api.entity.ComplaintEntity;
-import com.example.complaint_reporting_api.entity.UserEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
