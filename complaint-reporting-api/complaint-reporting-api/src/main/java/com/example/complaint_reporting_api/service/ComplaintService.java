@@ -5,13 +5,16 @@ import com.example.complaint_reporting_api.dto.complaint.CreateComplainRequest;
 import com.example.complaint_reporting_api.dto.complaint.StatisticComplainRequest;
 import com.example.complaint_reporting_api.entity.ComplaintEntity;
 import com.example.complaint_reporting_api.entity.Status;
+import com.example.complaint_reporting_api.entity.UserEntity;
 import com.example.complaint_reporting_api.repository.ComplaintRepo;
 
+import com.example.complaint_reporting_api.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.List;
@@ -23,17 +26,34 @@ public class ComplaintService {
 
     @Autowired
     private ComplaintRepo complaintRepo;
+    @Autowired
+    private UserRepo userRepo;
 
     public ResponseEntity<ComplaintEntity> createComplaints(CreateComplainRequest req){
-        try{
+        // Check user id
+        Optional<UserEntity> userOpt = userRepo.findById(req.getUserId());
+        if (userOpt.isEmpty() || userOpt.get().getDeletedAt() != null) {
+            return ResponseEntity.badRequest().body(null);
+        }
+        try {
+            // Create
             Status stats = Status.valueOf(req.getStatus().toUpperCase());
             ComplaintEntity tempComplaint = ComplaintEntity.builder()
                     .description(req.getDescription())
                     .status(stats)
                     .userId(req.getUserId())
+                    .createdAt(LocalDateTime.now())
                     .build();
-            return ResponseEntity.ok(complaintRepo.save(tempComplaint));
-        }catch (IllegalArgumentException e){
+            // Add to complaint list
+            ComplaintEntity saved = complaintRepo.save(tempComplaint);
+            // Add to user complaint list
+            UserEntity user = userOpt.get();
+            if (user.getComplaints() == null) {
+                user.setComplaints(new ArrayList<>());
+            }
+            user.getComplaints().add(saved);
+            return ResponseEntity.ok(saved);
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().build();
         }
     }
@@ -46,7 +66,6 @@ public class ComplaintService {
             return ResponseEntity.ok(listData);
         }
         try {
-
             Status stats = Status.valueOf(status.toUpperCase());
             List<ComplaintEntity> filteredData = listData.stream()
                     .filter(c -> c.getStatus() == stats)
