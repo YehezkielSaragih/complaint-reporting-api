@@ -45,4 +45,9 @@ public class ComplaintController {
         return complaintService.updateStatus(id, status);
     }
 
+    // delete complaint data
+    @DeleteMapping("/{id}")
+    public ResponseEntity<ComplaintEntity> deleteComplaint(@PathVariable Long id) {
+        return complaintService.deleteComplaint(id);
+    }
 }

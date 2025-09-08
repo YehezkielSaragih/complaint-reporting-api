@@ -22,7 +22,7 @@ public class UserController {
         return userService.registerUser(request);
     }
 
-    @GetMapping("/{id}/complaints")
+    @GetMapping("/{userId}/complaints")
     public List<ComplaintEntity> getUserComplaints(@PathVariable Long userId) {
         return userService.getUserComplaints(userId);
     }

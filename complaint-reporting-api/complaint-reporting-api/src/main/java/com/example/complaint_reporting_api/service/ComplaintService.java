@@ -45,7 +45,6 @@ public class ComplaintService {
             for(ComplaintEntity c : listData){
                 if (c.getStatus().equals(stats)) filteredData.add(c);
             }
-
             return ResponseEntity.ok(filteredData);
         } catch (IllegalArgumentException e){
             return ResponseEntity.noContent().build();
@@ -74,5 +73,12 @@ public class ComplaintService {
         }
     }
 
-
+    public ResponseEntity<ComplaintEntity> deleteComplaint(Long id) {
+        Optional<ComplaintEntity> complaintOpt = complaintRepo.findById(id);
+        if (complaintOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        complaintRepo.delete(id);
+        return ResponseEntity.ok(complaintOpt.get());
+    }
 }
