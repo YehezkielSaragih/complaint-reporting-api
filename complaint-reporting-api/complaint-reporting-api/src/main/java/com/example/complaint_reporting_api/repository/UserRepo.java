@@ -24,8 +24,10 @@ public class UserRepo {
             user.setUserId(seq.incrementAndGet());
             user.setCreatedAt(java.time.LocalDateTime.now());
         }
-        users.put(user.getUserId(), user);
-        user.setUpdatedAt(java.time.LocalDateTime.now());
+        else{
+            users.put(user.getUserId(), user);
+            user.setUpdatedAt(java.time.LocalDateTime.now());
+        }
         return user;
     }
 
