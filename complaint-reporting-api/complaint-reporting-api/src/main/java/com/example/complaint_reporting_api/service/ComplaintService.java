@@ -1,5 +1,6 @@
 package com.example.complaint_reporting_api.service;
 
+import com.example.complaint_reporting_api.dto.complaint.ChangeComplainStatusRequest;
 import com.example.complaint_reporting_api.dto.complaint.CreateComplainRequest;
 import com.example.complaint_reporting_api.entity.ComplaintEntity;
 import com.example.complaint_reporting_api.entity.Status;
@@ -55,15 +56,24 @@ public class ComplaintService {
     }
 
 
-    public ResponseEntity<ComplaintEntity> updateStatus(Long id, Status status) {
+    public ResponseEntity<ComplaintEntity> updateStatus(Long id, ChangeComplainStatusRequest status) {
         Optional<ComplaintEntity> complaintOpt = complaintRepo.findById(id);
         if (complaintOpt.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        ComplaintEntity tempComplaint = complaintOpt.get();
-        tempComplaint.setStatus(status);
-        tempComplaint.setUpdatedAt(LocalDateTime.now());
-        complaintRepo.save(tempComplaint);
+
+        try{
+            ComplaintEntity tempComplaint = complaintOpt.get();
+            Status stats = Status.valueOf(status.getStatus().toUpperCase());
+            tempComplaint.setStatus(stats);
+            tempComplaint.setUpdatedAt(LocalDateTime.now());
+            return ResponseEntity.ok(complaintRepo.save(tempComplaint));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
+        }
+
+
+    }
 
     public ResponseEntity<ComplaintEntity> getComplaintDetail(Long id){
         ComplaintEntity tempComplaint = complaintRepo.findById(id).orElse(null);

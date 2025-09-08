@@ -1,5 +1,6 @@
 package com.example.complaint_reporting_api.controller;
 
+import com.example.complaint_reporting_api.dto.complaint.ChangeComplainStatusRequest;
 import com.example.complaint_reporting_api.dto.complaint.CreateComplainRequest;
 import com.example.complaint_reporting_api.entity.ComplaintEntity;
 import com.example.complaint_reporting_api.entity.Status;
@@ -32,11 +33,9 @@ public class ComplaintController {
 
 
     @PutMapping("/{id}")
-    public ResponseEntity<ComplaintEntity> updateComplaintStatus(
-            @PathVariable Long id,
-            @RequestParam Status status
-    ) {
+    public ResponseEntity<ComplaintEntity> updateComplaintStatus(@PathVariable Long id, @RequestBody ChangeComplainStatusRequest status) {
         return complaintService.updateStatus(id, status);
+    }
 
     // get complaint detail
     @GetMapping("/{id}")
