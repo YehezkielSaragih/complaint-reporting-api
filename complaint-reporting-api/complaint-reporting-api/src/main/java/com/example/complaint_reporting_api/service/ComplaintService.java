@@ -41,12 +41,17 @@ public class ComplaintService {
     }
 
     public ResponseEntity<ComplaintEntity> createComplaints(CreateComplainRequest req){
-        ComplaintEntity tempComplaint = ComplaintEntity.builder()
-                .description(req.getDescription())
-                .status(Status.valueOf(req.getStatus().toUpperCase()))
-                .userId(req.getUserId())
-                .build();
-        return ResponseEntity.ok(complaintRepo.save(tempComplaint));
+        try{
+            Status stats = Status.valueOf(req.getStatus().toUpperCase());
+            ComplaintEntity tempComplaint = ComplaintEntity.builder()
+                    .description(req.getDescription())
+                    .status(stats)
+                    .userId(req.getUserId())
+                    .build();
+            return ResponseEntity.ok(complaintRepo.save(tempComplaint));
+        }catch (IllegalArgumentException e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 
