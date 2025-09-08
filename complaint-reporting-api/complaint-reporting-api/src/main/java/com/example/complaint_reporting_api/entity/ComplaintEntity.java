@@ -16,6 +16,7 @@ public class ComplaintEntity {
     private Long userId;
 
     @NotBlank(message = "Deskripsi keluhan tidak boleh kosong")
+    @Size(min = 20, message = "Deskripsi minimal 20 karakter")
     private String description;
 
     private Status status;
