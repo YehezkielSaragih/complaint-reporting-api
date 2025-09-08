@@ -2,6 +2,7 @@ package com.example.complaint_reporting_api.service;
 
 import com.example.complaint_reporting_api.dto.complaint.ChangeComplainStatusRequest;
 import com.example.complaint_reporting_api.dto.complaint.CreateComplainRequest;
+import com.example.complaint_reporting_api.dto.complaint.StatisticComplainRequest;
 import com.example.complaint_reporting_api.entity.ComplaintEntity;
 import com.example.complaint_reporting_api.entity.Status;
 import com.example.complaint_reporting_api.repository.ComplaintRepo;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.Optional;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -84,5 +86,20 @@ public class ComplaintService {
         }
         complaintRepo.delete(id);
         return ResponseEntity.ok(complaintOpt.get());
+    }
+
+    public ResponseEntity<List<StatisticComplainRequest>> getStatistics() {
+        List<ComplaintEntity> activeComplaints = complaintRepo.findAll().stream()
+                .filter(c -> c.getDeletedAt() == null)
+                .toList();
+        List<StatisticComplainRequest> stats = Arrays.stream(Status.values())
+                .map(status -> new StatisticComplainRequest(
+                        status,
+                        activeComplaints.stream()
+                                .filter(c -> c.getStatus() == status)
+                                .count()
+                ))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(stats);
     }
 }
