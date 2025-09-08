@@ -5,6 +5,7 @@ import com.example.complaint_reporting_api.entity.ComplaintEntity;
 import com.example.complaint_reporting_api.entity.UserEntity;
 import com.example.complaint_reporting_api.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,11 +17,11 @@ public class UserService {
     @Autowired
     private UserRepo userRepo;
 
-    public UserEntity registerUser(RegisterUsersRequest request) {
+    public ResponseEntity<UserEntity> registerUser(RegisterUsersRequest request) {
         UserEntity user = UserEntity.builder()
                 .email(request.getEmail())
                 .build();
-        return userRepo.save(user);
+        return ResponseEntity.ok(userRepo.save(user));
     }
 
     public List<ComplaintEntity> getUserComplaints(Long userId){

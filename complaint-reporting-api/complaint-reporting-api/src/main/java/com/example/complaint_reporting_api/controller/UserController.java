@@ -6,6 +6,7 @@ import com.example.complaint_reporting_api.dto.user.RegisterUsersRequest;
 import com.example.complaint_reporting_api.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import jakarta.validation.Valid;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -17,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public UserEntity registerUser(@Valid @RequestBody RegisterUsersRequest request) {
+    public ResponseEntity<UserEntity> registerUser(@Valid @RequestBody RegisterUsersRequest request) {
         return userService.registerUser(request);
     }
 
