@@ -25,8 +25,10 @@ public class ComplaintRepo {
             complaint.setComplaintId(seq.incrementAndGet());
             complaint.setCreatedAt(java.time.LocalDateTime.now());
         }
-        complaints.put(complaint.getComplaintId(), complaint);
-        complaint.setUpdatedAt(java.time.LocalDateTime.now());
+        else{
+            complaints.put(complaint.getComplaintId(), complaint);
+            complaint.setUpdatedAt(java.time.LocalDateTime.now());
+        }
         return complaint;
     }
 
