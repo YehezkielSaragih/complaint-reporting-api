@@ -9,6 +9,5 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class ChangeComplainStatusRequest {
-
-    private Status status;
+    private String status;
 }
