@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -36,18 +37,22 @@ public class ComplaintService {
         }
     }
 
-    public ResponseEntity<List<ComplaintEntity>> getAllComplaint(String status){
-        List<ComplaintEntity> listData = complaintRepo.findAll();
-        List<ComplaintEntity> filteredData = new ArrayList<>();
-        if(status.isEmpty()) return ResponseEntity.ok(listData);
-        try{
+    public ResponseEntity<List<ComplaintEntity>> getAllComplaint(String status) {
+        List<ComplaintEntity> listData = complaintRepo.findAll().stream()
+                .filter(c -> c.getDeletedAt() == null)
+                .collect(Collectors.toList());
+        if (status == null || status.isBlank()) {
+            return ResponseEntity.ok(listData);
+        }
+        try {
+
             Status stats = Status.valueOf(status.toUpperCase());
-            for(ComplaintEntity c : listData){
-                if (c.getStatus().equals(stats)) filteredData.add(c);
-            }
+            List<ComplaintEntity> filteredData = listData.stream()
+                    .filter(c -> c.getStatus() == stats)
+                    .collect(Collectors.toList());
             return ResponseEntity.ok(filteredData);
-        } catch (IllegalArgumentException e){
-            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().build();
         }
     }
 
