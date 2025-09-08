@@ -1,4 +1,4 @@
-package com.example.complaint_reporting_api.DTO.users;
+package com.example.complaint_reporting_api.dto.user;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

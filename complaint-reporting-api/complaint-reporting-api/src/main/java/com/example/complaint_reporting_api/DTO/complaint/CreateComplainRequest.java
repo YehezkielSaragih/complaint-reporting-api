@@ -1,4 +1,4 @@
-package com.example.complaint_reporting_api.DTO.complain;
+package com.example.complaint_reporting_api.dto.complaint;
 
 import com.example.complaint_reporting_api.entity.Status;
 import jakarta.validation.constraints.NotBlank;
